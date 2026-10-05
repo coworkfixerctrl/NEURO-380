@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Insight Consulting — Neuroband Intelligence Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Open navigation" aria-controls="site-sidebar" aria-expanded="false">☰ <span>Menu</span></button>
+<div class="sidebar-scrim" id="sidebar-scrim" aria-hidden="true"></div>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="site-sidebar">
+    <div class="brand">
+      <div class="brand-text">
+        <span class="brand-name">Insight Consulting</span>
+        <span class="brand-sub">Neuroband Intelligence Hub</span>
+      </div>
+      <button class="notification-toggle" id="notification-toggle" aria-label="Open notifications" title="Notifications">
+        <svg class="notification-icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg><span class="notification-count is-hidden" id="notification-count">0</span>
+      </button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode"><svg class="theme-icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false"></svg></button>
+      <button class="mobile-sidebar-close" id="mobile-sidebar-close" aria-label="Close navigation">&times;</button>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-group nav-primary" aria-label="Workspace">
+        <button class="nav-item is-active" data-tab="overview">Overview</button>
+        <button class="nav-item" data-tab="analysis">Analysis</button>
+        <button class="nav-item" data-tab="plan">Collection Plan</button>
+        <button class="nav-item" data-tab="repository">Repository</button>
+        <button class="nav-item" data-tab="team">Team</button>
+        <button class="nav-item" data-tab="activity">Activity</button>
+      </div>
+      <div class="nav-group nav-admin" aria-label="System">
+        <p class="nav-group-label">System</p>
+        <button class="nav-item" data-tab="manual">Manual</button>
+      </div>
+    </nav>
+
+    <div class="auth-box" id="auth-box">
+      <button class="btn btn-ghost btn-small" id="open-auth" style="width:100%;">Sign in</button>
+    </div>
+
+    <div class="notification-panel is-hidden" id="notification-panel">
+      <div class="notification-panel-head"><strong>Notifications</strong><button class="notification-mark-read" id="notification-mark-read">Mark read</button></div>
+      <div id="notification-list"></div>
+    </div>
+
+    <div class="sidebar-status">
+      <div class="status-row">
+        <span class="status-dot" id="conn-dot"></span>
+        <span id="conn-label">Checking connection…</span>
+      </div>
+      <div class="status-row muted" id="entry-count">— entries stored</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <section class="panel is-active" id="panel-overview">
+      <header class="panel-head">
+        <p class="eyebrow">Key Intelligence Topic</p>
+        <h1 id="kit-text" class="kit-statement"></h1>
+      </header>
+
+      <div class="kin-grid" id="kin-grid"></div>
+    </section>
+
+    <!-- MY WORK DASHBOARD (moved inside Team tab) -->
+
+    <!-- COLLECTION PLAN -->
+    <section class="panel" id="panel-analysis">
+      <header class="panel-head">
+        <p class="eyebrow">Decision support</p>
+        <h1>Analysis</h1>
+        <p class="panel-intro">A live read of the evidence your team has collected so far.</p>
+      </header>
+      <div class="analysis-summary" id="analysis-summary"></div>
+      <div class="analysis-grid">
+        <section class="analysis-card">
+          <div class="analysis-card-head"><h2>KIN coverage</h2><span class="analysis-caption">Sources by intelligence need</span></div>
+          <div class="analysis-bars" id="analysis-kin-bars"></div>
+        </section>
+        <section class="analysis-card">
+          <div class="analysis-card-head"><h2>Source mix</h2><span class="analysis-caption">Evidence diversity</span></div>
+          <div class="analysis-bars" id="analysis-type-bars"></div>
+        </section>
+        <section class="analysis-card analysis-card-wide">
+          <div class="analysis-card-head"><h2>Question coverage</h2><span class="analysis-caption">Gaps show where more research may be needed</span></div>
+          <div class="analysis-question-list" id="analysis-question-list"></div>
+        </section>
+        <section class="analysis-card">
+          <div class="analysis-card-head"><h2>Task progress</h2><span class="analysis-caption">Current team workload</span></div>
+          <div class="progress-track"><span id="analysis-progress-bar"></span></div>
+          <p class="analysis-progress-label" id="analysis-progress-label"></p>
+        </section>
+      </div>
+    </section>
+
+    <!-- COLLECTION PLAN -->
+    <section class="panel" id="panel-plan">
+      <header class="panel-head">
+        <p class="eyebrow">Phase 1</p>
+        <h1>Data Collection Plan</h1>
+      </header>
+      <div class="doc-block" data-slug="collection_plan">
+        <div class="doc-view" id="view-collection_plan"></div>
+        <textarea class="doc-edit is-hidden" id="edit-collection_plan"></textarea>
+        <div class="doc-actions">
+          <button class="btn btn-ghost" data-edit="collection_plan">Edit</button>
+          <button class="btn btn-primary is-hidden" data-save="collection_plan">Save changes</button>
+          <button class="btn btn-ghost is-hidden" data-cancel="collection_plan">Cancel</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPOSITORY -->
+    <section class="panel" id="panel-repository">
+      <header class="panel-head panel-head-row">
+        <div>
+          <p class="eyebrow">Phase 2 &amp; 3</p>
+          <h1>Repository</h1>
+        </div>
+        <button class="btn repository-add-btn" id="open-add-entry">+ Add source</button>
+      </header>
+
+      <div class="filter-bar">
+        <div class="filter-search-wrap">
+          <svg class="filter-search-icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10.8" cy="10.8" r="6.3" /><path d="m15.5 15.5 4.2 4.2" /></svg>
+          <input type="search" id="filter-search" placeholder="Search source, author, notes…" />
+        </div>
+        <div class="filter-dropdown" id="filter-kin-control">
+          <button type="button" class="filter-dropdown-trigger" id="filter-kin-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="filter-kin-menu">
+            <span class="filter-dropdown-value" id="filter-kin-current">All KINs</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="m7 10 5 5 5-5" /></svg>
+          </button>
+          <div class="filter-dropdown-menu is-hidden" id="filter-kin-menu" role="listbox" aria-label="Filter by KIN"></div>
+          <select id="filter-kin" class="is-hidden" aria-hidden="true" tabindex="-1"><option value="">All KINs</option></select>
+        </div>
+        <div class="filter-dropdown" id="filter-kiq-control">
+          <button type="button" class="filter-dropdown-trigger" id="filter-kiq-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="filter-kiq-menu">
+            <span class="filter-dropdown-value" id="filter-kiq-current">All KIQs</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="m7 10 5 5 5-5" /></svg>
+          </button>
+          <div class="filter-dropdown-menu is-hidden" id="filter-kiq-menu" role="listbox" aria-label="Filter by KIQ"></div>
+          <select id="filter-kiq" class="is-hidden" aria-hidden="true" tabindex="-1"><option value="">All KIQs</option></select>
+        </div>
+        <div class="filter-dropdown" id="filter-type-control">
+          <button type="button" class="filter-dropdown-trigger" id="filter-type-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="filter-type-menu">
+            <span class="filter-dropdown-value" id="filter-type-current">All source types</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="m7 10 5 5 5-5" /></svg>
+          </button>
+          <div class="filter-dropdown-menu is-hidden" id="filter-type-menu" role="listbox" aria-label="Filter by source type"></div>
+          <select id="filter-type" class="is-hidden" aria-hidden="true" tabindex="-1"><option value="">All source types</option></select>
+        </div>
+      </div>
+
+      <div class="card-grid" id="card-grid"></div>
+      <p class="empty-state is-hidden" id="empty-state">No entries match yet. Add your first source, or clear your filters.</p>
+    </section>
+
+    <!-- TEAM -->
+    <section class="panel" id="panel-team">
+      <header class="panel-head">
+        <p class="eyebrow">Group workspace</p>
+        <h1>Team</h1>
+      </header>
+
+      <div id="your-profile-slot"></div>
+
+      <!-- PERSONAL DASHBOARD (visible only to logged-in users) -->
+      <div id="personal-dashboard" class="personal-dashboard is-hidden">
+        <div class="section-subhead">
+          <h2>Personal Dashboard: My Work</h2>
+        </div>
+
+        <div class="my-work-summary" id="my-work-counts"></div>
+
+        <div class="my-work-layout">
+          <!-- Calendar Section -->
+          <div class="my-work-calendar-section">
+            <div class="my-work-calendar-controls">
+              <button id="calendar-prev-month" class="btn btn-ghost btn-small" aria-label="Previous month">←</button>
+              <h2 id="calendar-month-year"></h2>
+              <button id="calendar-next-month" class="btn btn-ghost btn-small" aria-label="Next month">→</button>
+            </div>
+            <div class="my-work-calendar" id="my-work-calendar"></div>
+          </div>
+
+          <!-- Tasks Section -->
+          <div class="my-work-tasks-section">
+            <div class="my-work-section-head">
+              <h2>Your Tasks</h2>
+              <select id="my-work-filter" class="btn btn-ghost btn-small">
+                <option value="all">All tasks</option>
+                <option value="open">Open tasks</option>
+                <option value="overdue">Overdue</option>
+                <option value="due-soon">Due soon (7 days)</option>
+                <option value="done">Completed</option>
+              </select>
+            </div>
+            <div class="my-work-list" id="my-work-list"></div>
+            <p class="empty-state is-hidden" id="my-work-empty">No tasks assigned to you yet. Tasks you're assigned to will appear here.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-subhead">
+        <h2>Team directory</h2>
+      </div>
+      <p class="team-directory-note" id="team-directory-note">Team member details are visible to admins.</p>
+      <div class="member-grid" id="member-grid"></div>
+
+      <div class="section-subhead">
+        <h2>Assigned work</h2>
+      </div>
+      <div class="task-view-controls" role="tablist" aria-label="Task views">
+        <button class="task-view-btn is-active" type="button" role="tab" aria-selected="true" data-task-view="mine">My tasks</button>
+        <button class="task-view-btn" type="button" role="tab" aria-selected="false" data-task-view="attention">Needs attention</button>
+        <button class="task-view-btn" type="button" role="tab" aria-selected="false" data-task-view="all">All tasks</button>
+        <button class="task-assign-btn" type="button" id="open-add-task">+ Assign task</button>
+      </div>
+      <div class="task-list" id="task-list"></div>
+      <p class="empty-state is-hidden" id="task-empty-state">No tasks assigned yet.</p>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section class="panel" id="panel-activity">
+      <header class="panel-head">
+        <p class="eyebrow">Audit trail</p>
+        <h1>Activity</h1>
+      </header>
+      <p class="hint" style="margin-top:-20px; margin-bottom:28px;">A permanent, append-only record of changes to this system — nobody, including admins, can edit or delete entries here. Updates live automatically as your group works.</p>
+      <div class="activity-list" id="activity-list"></div>
+      <p class="empty-state is-hidden" id="activity-empty-state">No activity recorded yet.</p>
+    </section>
+
+    <!-- MANUAL -->
+    <section class="panel" id="panel-manual">
+      <header class="panel-head">
+        <p class="eyebrow">Phase 4</p>
+        <h1>System Manual</h1>
+      </header>
+      <div class="doc-block" data-slug="manual">
+        <div class="doc-view" id="view-manual"></div>
+        <textarea class="doc-edit is-hidden" id="edit-manual"></textarea>
+        <div class="doc-actions">
+          <button class="btn btn-ghost" data-edit="manual">Edit</button>
+          <button class="btn btn-primary is-hidden" data-save="manual">Save changes</button>
+          <button class="btn btn-ghost is-hidden" data-cancel="manual">Cancel</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ADD ENTRY MODAL -->
+<div class="modal-overlay is-hidden" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Add a source</h2>
+      <button class="modal-close" id="close-add-entry">&times;</button>
+    </div>
+
+    <form id="entry-form">
+      <div class="field-row">
+        <label>KIN
+          <select id="f-kin" required></select>
+        </label>
+        <label>KIQ
+          <select id="f-kiq" required></select>
+        </label>
+      </div>
+
+      <label>Source (full reference or name)
+        <input type="text" id="f-source" placeholder="e.g. Business Insider Africa" required />
+      </label>
+
+      <div class="field-row">
+        <label>Author / organisation
+          <input type="text" id="f-author" placeholder="e.g. Whoop Inc." required />
+        </label>
+        <label>Type of source
+          <select id="f-type" required></select>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <label>Date published
+          <input type="date" id="f-date-pub" required />
+        </label>
+        <label>Date collected
+          <input type="date" id="f-date-collected" required />
+        </label>
+      </div>
+
+      <label>Relevance to KIQ (why this source matters)
+        <textarea id="f-relevance" rows="3" placeholder="e.g. Confirms competitor pricing strategy referenced in KIN1_KIQ2" required></textarea>
+      </label>
+
+      <label>Extract file (PDF or image — the actual downloaded source, not a link)
+        <input type="file" id="f-file" accept=".pdf,image/*" required />
+      </label>
+
+      <p class="filename-preview" id="filename-preview"></p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancel-add-entry">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="submit-entry">Save to repository</button>
+      </div>
+      <p class="form-status" id="form-status"></p>
+    </form>
+  </div>
+</div>
+
+<!-- DETAIL / VIEW MODAL -->
+<div class="modal-overlay is-hidden" id="detail-overlay">
+  <div class="modal" id="detail-modal"></div>
+</div>
+
+<!-- ADD MEMBER MODAL -->
+<div class="modal-overlay is-hidden" id="member-modal-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="member-modal-title">Add a group member</h2>
+      <button class="modal-close" id="close-add-member">&times;</button>
+    </div>
+    <form id="member-form">
+      <label>Name
+        <input type="text" id="m-name" placeholder="e.g. Thandi M." required />
+      </label>
+      <label>Short bio (optional — role on the team, focus area, etc.)
+        <textarea id="m-bio" rows="2" placeholder="e.g. Leads KIN2 research, background in market analysis"></textarea>
+      </label>
+      <label>Profile picture (optional — you can also add this later by clicking your avatar)
+        <input type="file" id="m-avatar" accept="image/*" />
+      </label>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancel-add-member">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="submit-member">Add member</button>
+      </div>
+      <p class="form-status" id="member-form-status"></p>
+    </form>
+  </div>
+</div>
+
+<!-- hidden file input used for re-uploading an existing member's avatar -->
+<input type="file" id="avatar-reupload-input" accept="image/*" class="is-hidden" />
+
+<!-- ADD TASK MODAL -->
+<div class="modal-overlay is-hidden" id="task-modal-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Assign a task</h2>
+      <button class="modal-close" id="close-add-task">&times;</button>
+    </div>
+    <form id="task-form">
+      <label>Task description
+        <input type="text" id="t-title" placeholder="e.g. Collect 3 sources for KIN2_KIQ1" required />
+      </label>
+
+      <div class="field-row">
+        <label>Assigned to
+          <select id="t-assigned-to" required></select>
+        </label>
+        <label>Assigned by
+          <select id="t-assigned-by" required></select>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <label>Related KIN (optional)
+          <select id="t-kin"><option value="">—</option></select>
+        </label>
+        <label>Related KIQ (optional)
+          <select id="t-kiq"><option value="">—</option></select>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <label>Due date
+          <input type="date" id="t-due" />
+        </label>
+        <label>Status
+          <select id="t-status">
+            <option>To do</option>
+            <option>In progress</option>
+            <option>Done</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancel-add-task">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="submit-task">Assign task</button>
+      </div>
+      <p class="form-status" id="task-form-status"></p>
+    </form>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay is-hidden" id="auth-modal-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="auth-modal-title">Sign in</h2>
+      <button class="modal-close" id="close-auth">&times;</button>
+    </div>
+    <form id="auth-form">
+      <label>Email
+        <input type="email" id="auth-email" required />
+      </label>
+      <label>Password
+        <input type="password" id="auth-password" required minlength="6" />
+      </label>
+      <div class="modal-actions" style="justify-content:space-between; align-items:center;">
+        <button type="button" class="btn btn-ghost btn-small" id="auth-toggle-mode">Need an account? Sign up</button>
+        <button type="submit" class="btn btn-primary" id="submit-auth">Sign in</button>
+      </div>
+      <p class="form-status" id="auth-form-status"></p>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
